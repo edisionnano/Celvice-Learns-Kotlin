@@ -1,18 +1,17 @@
 package com.example.senthil.kotlin_recyclerview.Activity
 
 import android.os.AsyncTask
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.widget.LinearLayout
-import android.widget.Toast
+import com.example.senthil.kotlin_recyclerview.Adapter.CustomRecyclerAdapter
 import com.example.senthil.kotlin_recyclerview.Model.AndroidVersionModel
 import com.example.senthil.kotlin_recyclerview.R
 import com.example.senthil.kotlin_recyclerview.Utils.Helper
 import org.jsoup.Jsoup
 import java.io.IOException
-import com.example.senthil.kotlin_recyclerview.Adapter.CustomRecyclerAdapter
 import kotlin.concurrent.fixedRateTimer
 
 class RecyclerViewActivity : AppCompatActivity() {
@@ -24,13 +23,13 @@ class RecyclerViewActivity : AppCompatActivity() {
         rvRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayout.VERTICAL, false)
         var adapter = CustomRecyclerAdapter(this, Helper.Companion.getVersionsList())
         rvRecyclerView.adapter = adapter
-        fixedRateTimer("timer",false,0,10000){
+        fixedRateTimer("timer", false, 0, 2000){
             this@RecyclerViewActivity.runOnUiThread {
                 //Toast.makeText(this@RecyclerViewActivity, "text", Toast.LENGTH_SHORT).show()
                 adapter.notifyDataSetChanged()
             }
         }
-        fixedRateTimer("timer",false,0,60000){
+        fixedRateTimer("timer", false, 0, 720000){
             this@RecyclerViewActivity.runOnUiThread {
                 //Toast.makeText(this@RecyclerViewActivity, "text", Toast.LENGTH_SHORT).show()
                 WebScratch().execute()
@@ -51,10 +50,14 @@ class RecyclerViewActivity : AppCompatActivity() {
                         val hour = element.select("h3").get(3).text()
                         val links = element.select("a").size
                         for (i in 1..(element.select("a").size) step 1) {
-                            var link = element.select("a").get(i-1).attr("href")
+                            var link = element.select("a").get(i - 1).attr("href")
                             println("$link")
                         }
-                        Helper.matchList.add(AndroidVersionModel(R.drawable.championsleague, "$teams", "$championship", "$sound", "$hour"))
+                        var logoname = "$championship".toLowerCase().replace("\\s+".toRegex(), "")
+                        logoname = logoname.replace("νβα","nba")
+                        val resID = resources.getIdentifier(logoname, "drawable", packageName)
+                        println("$logoname")
+                        Helper.matchList.add(AndroidVersionModel(resID, "$teams", "$championship", "$sound", "$hour"))
                     }
                 }
             } catch (e: IOException) {
