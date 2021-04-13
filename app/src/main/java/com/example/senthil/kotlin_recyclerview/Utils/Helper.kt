@@ -5,10 +5,10 @@ import com.example.senthil.kotlin_recyclerview.R
 
 class Helper{
     companion object {
-        fun <ArrayList> getVersionsList(): ArrayList {
-            var androidVersionList = ArrayList<AndroidVersionModel>()
-            androidVersionList.add(AndroidVersionModel(R.drawable.superleague, "Ολυμπιακός - Παναθηναίκός", "Super League", soundLang = "Ελληνικό", matchTime = "10:00"))
-            return androidVersionList as ArrayList
+        public var matchList = ArrayList<AndroidVersionModel>()
+        public fun <ArrayList> getVersionsList(): ArrayList {
+            //matchList.add(AndroidVersionModel(R.drawable.superleague, "Ολυμπιακός - Παναθηναίκός", "Super League", soundLang = "Ελληνικό", matchTime = "10:00"))
+            return matchList as ArrayList
         }
     }
 }
