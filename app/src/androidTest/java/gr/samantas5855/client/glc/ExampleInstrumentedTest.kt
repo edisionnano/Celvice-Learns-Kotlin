@@ -1,4 +1,4 @@
-package com.example.senthil.kotlin_recyclerview
+package gr.samantas5855.client.glc
 
 import android.support.test.InstrumentationRegistry
 import android.support.test.runner.AndroidJUnit4

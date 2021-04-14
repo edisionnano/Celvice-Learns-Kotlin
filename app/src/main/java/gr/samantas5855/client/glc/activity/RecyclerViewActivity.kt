@@ -1,17 +1,19 @@
-package com.example.senthil.kotlin_recyclerview.Activity
+package gr.samantas5855.client.glc.activity
 
+import android.annotation.SuppressLint
 import android.os.AsyncTask
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.widget.LinearLayout
-import com.example.senthil.kotlin_recyclerview.Adapter.CustomRecyclerAdapter
-import com.example.senthil.kotlin_recyclerview.Model.AndroidVersionModel
+import gr.samantas5855.client.glc.adapter.CustomRecyclerAdapter
+import gr.samantas5855.client.glc.model.AndroidVersionModel
 import com.example.senthil.kotlin_recyclerview.R
-import com.example.senthil.kotlin_recyclerview.Utils.Helper
+import gr.samantas5855.client.glc.utils.Helper
 import org.jsoup.Jsoup
 import java.io.IOException
+import java.util.*
 import kotlin.concurrent.fixedRateTimer
 
 class RecyclerViewActivity : AppCompatActivity() {
@@ -21,7 +23,7 @@ class RecyclerViewActivity : AppCompatActivity() {
         setContentView(R.layout.activity_recycler_view)
         val rvRecyclerView = findViewById<RecyclerView>(R.id.sample_recyclerView)
         rvRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayout.VERTICAL, false)
-        var adapter = CustomRecyclerAdapter(this, Helper.Companion.getVersionsList())
+        val adapter = CustomRecyclerAdapter(Helper.getVersionsList())
         rvRecyclerView.adapter = adapter
         fixedRateTimer("timer", false, 0, 2000){
             this@RecyclerViewActivity.runOnUiThread {
@@ -37,27 +39,26 @@ class RecyclerViewActivity : AppCompatActivity() {
         }
     }
 
+    @SuppressLint("StaticFieldLeak")
     inner class WebScratch : AsyncTask<Void, Void, Void>() {
-        private lateinit var words: String
         override fun doInBackground(vararg params: Void): Void? {
             try {
                 Helper.matchList.clear()
-                val document =  Jsoup.connect("https://greeklivechannels.ml/livematches.html").get().run {
-                    select("div.match").forEachIndexed { index, element ->
-                        val championship = element.select("h3").get(0).text()
-                        val sound = element.select("h3").get(1).text()
-                        val teams = element.select("h3").get(2).text()
-                        val hour = element.select("h3").get(3).text()
-                        val links = element.select("a").size
+                Jsoup.connect("https://greeklivechannels.ml/livematches.html").get().run {
+                    select("div.match").forEachIndexed { _, element ->
+                        val championship = element.select("h3")[0].text()
+                        val sound = element.select("h3")[1].text()
+                        val teams = element.select("h3")[2].text()
+                        val hour = element.select("h3")[3].text()
                         for (i in 1..(element.select("a").size) step 1) {
-                            var link = element.select("a").get(i - 1).attr("href")
-                            println("$link")
+                            val link = element.select("a")[i - 1].attr("href")
+                            println(link)
                         }
-                        var logoname = "$championship".toLowerCase().replace("\\s+".toRegex(), "")
-                        logoname = logoname.replace("νβα","nba")
-                        val resID = resources.getIdentifier(logoname, "drawable", packageName)
-                        println("$logoname")
-                        Helper.matchList.add(AndroidVersionModel(resID, "$teams", "$championship", "$sound", "$hour"))
+                        var logoName = championship.toLowerCase(Locale.ROOT).replace("\\s+".toRegex(), "")
+                        logoName = logoName.replace("νβα","nba")
+                        val resID = resources.getIdentifier(logoName, "drawable", packageName)
+                        println(logoName)
+                        Helper.matchList.add(AndroidVersionModel(resID, teams, championship, sound, hour))
                     }
                 }
             } catch (e: IOException) {

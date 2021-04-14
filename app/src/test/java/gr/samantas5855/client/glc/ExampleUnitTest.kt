@@ -1,4 +1,4 @@
-package com.example.senthil.kotlin_recyclerview
+package gr.samantas5855.client.glc
 
 import org.junit.Test
 
