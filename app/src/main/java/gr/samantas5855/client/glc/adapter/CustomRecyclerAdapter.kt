@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import gr.samantas5855.client.glc.model.AndroidVersionModel
 import com.example.senthil.kotlin_recyclerview.R
 
@@ -32,5 +33,12 @@ class CustomRecyclerAdapter(private val androidVersionList: ArrayList<AndroidVer
         val txtTitle: TextView = itemView.findViewById(R.id.appOSTitle_txtVw)
         val txtContent: TextView = itemView.findViewById(R.id.appOSDetails_txtVw)
         val image: ImageView = itemView.findViewById(R.id.appOS_imageVw)
+
+        init {
+            itemView.setOnClickListener {
+                val position: Int = adapterPosition
+                Toast.makeText(itemView.context, "You click on $position", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 }

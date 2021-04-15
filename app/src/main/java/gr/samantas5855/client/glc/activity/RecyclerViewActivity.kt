@@ -7,9 +7,9 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.widget.LinearLayout
+import com.example.senthil.kotlin_recyclerview.R
 import gr.samantas5855.client.glc.adapter.CustomRecyclerAdapter
 import gr.samantas5855.client.glc.model.AndroidVersionModel
-import com.example.senthil.kotlin_recyclerview.R
 import gr.samantas5855.client.glc.utils.Helper
 import org.jsoup.Jsoup
 import java.io.IOException
@@ -25,16 +25,15 @@ class RecyclerViewActivity : AppCompatActivity() {
         rvRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayout.VERTICAL, false)
         val adapter = CustomRecyclerAdapter(Helper.getVersionsList())
         rvRecyclerView.adapter = adapter
-        fixedRateTimer("timer", false, 0, 2000){
-            this@RecyclerViewActivity.runOnUiThread {
-                //Toast.makeText(this@RecyclerViewActivity, "text", Toast.LENGTH_SHORT).show()
-                adapter.notifyDataSetChanged()
-            }
-        }
-        fixedRateTimer("timer", false, 0, 720000){
+        WebScratch().execute()
+        Thread.sleep(3000L)
+        adapter.notifyDataSetChanged()
+        fixedRateTimer("timer", false, 0, 60000){
             this@RecyclerViewActivity.runOnUiThread {
                 //Toast.makeText(this@RecyclerViewActivity, "text", Toast.LENGTH_SHORT).show()
                 WebScratch().execute()
+                Thread.sleep(2000L)
+                adapter.notifyDataSetChanged()
             }
         }
     }
@@ -51,13 +50,12 @@ class RecyclerViewActivity : AppCompatActivity() {
                         val teams = element.select("h3")[2].text()
                         val hour = element.select("h3")[3].text()
                         for (i in 1..(element.select("a").size) step 1) {
-                            val link = element.select("a")[i - 1].attr("href")
-                            println(link)
+                            element.select("a")[i - 1].attr("href")
+                            //println(link)
                         }
                         var logoName = championship.toLowerCase(Locale.ROOT).replace("\\s+".toRegex(), "")
                         logoName = logoName.replace("νβα","nba")
                         val resID = resources.getIdentifier(logoName, "drawable", packageName)
-                        println(logoName)
                         Helper.matchList.add(AndroidVersionModel(resID, teams, championship, sound, hour))
                     }
                 }
