@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.senthil.kotlin_recyclerview">
+    package="gr.samantas5855.client.glc">
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
@@ -11,6 +12,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity
+            android:name="gr.samantas5855.client.glc.player.Exo"
+            android:label="@string/title_activity_main"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity android:name="gr.samantas5855.client.glc.activity.RecyclerViewActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

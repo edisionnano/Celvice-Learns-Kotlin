@@ -1,7 +1,7 @@
 package gr.samantas5855.client.glc.adapter
 
 import android.annotation.SuppressLint
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,7 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import gr.samantas5855.client.glc.model.AndroidVersionModel
-import com.example.senthil.kotlin_recyclerview.R
+import gr.samantas5855.client.glc.R
 
 class CustomRecyclerAdapter(private val androidVersionList: ArrayList<AndroidVersionModel>) : RecyclerView.Adapter<CustomRecyclerAdapter.ViewHolder>() {
 
@@ -40,5 +40,6 @@ class CustomRecyclerAdapter(private val androidVersionList: ArrayList<AndroidVer
                 Toast.makeText(itemView.context, "You click on $position", Toast.LENGTH_SHORT).show()
             }
         }
+
     }
 }

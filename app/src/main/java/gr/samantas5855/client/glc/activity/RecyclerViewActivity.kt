@@ -1,15 +1,16 @@
 package gr.samantas5855.client.glc.activity
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.AsyncTask
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
-import android.widget.LinearLayout
-import com.example.senthil.kotlin_recyclerview.R
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import gr.samantas5855.client.glc.R
 import gr.samantas5855.client.glc.adapter.CustomRecyclerAdapter
 import gr.samantas5855.client.glc.model.AndroidVersionModel
+import gr.samantas5855.client.glc.player.Exo
 import gr.samantas5855.client.glc.utils.Helper
 import org.jsoup.Jsoup
 import java.io.IOException
@@ -22,12 +23,13 @@ class RecyclerViewActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_recycler_view)
         val rvRecyclerView = findViewById<RecyclerView>(R.id.sample_recyclerView)
-        rvRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayout.VERTICAL, false)
+        rvRecyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
         val adapter = CustomRecyclerAdapter(Helper.getVersionsList())
         rvRecyclerView.adapter = adapter
         WebScratch().execute()
         Thread.sleep(3000L)
-        adapter.notifyDataSetChanged()
+        //adapter.notifyDataSetChanged()
+        sendMessage()
         fixedRateTimer("timer", false, 0, 60000){
             this@RecyclerViewActivity.runOnUiThread {
                 //Toast.makeText(this@RecyclerViewActivity, "text", Toast.LENGTH_SHORT).show()
@@ -64,5 +66,10 @@ class RecyclerViewActivity : AppCompatActivity() {
             }
             return null
         }
+    }
+    fun sendMessage() {
+        val intent = Intent(this@RecyclerViewActivity, Exo::class.java).apply {
+        }
+        startActivity(intent)
     }
 }

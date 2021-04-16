@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Kotlin-RecyclerView-master.iml" filepath="$PROJECT_DIR$/.idea/modules/Kotlin-RecyclerView-master.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Kotlin-RecyclerView-master.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Kotlin-RecyclerView-master.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Celvice-Learns-Kotlin.iml" filepath="$PROJECT_DIR$/.idea/modules/Celvice-Learns-Kotlin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Celvice-Learns-Kotlin.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Celvice-Learns-Kotlin.app.iml" />
     </modules>
   </component>
 </project>
