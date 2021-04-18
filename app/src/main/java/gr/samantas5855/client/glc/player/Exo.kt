@@ -2,9 +2,11 @@ package gr.samantas5855.client.glc.player
 
 import android.content.pm.ActivityInfo
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.LinearLayout
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import gr.samantas5855.client.glc.R
 import com.google.android.exoplayer2.MediaItem
@@ -15,7 +17,6 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.MimeTypes
 import com.google.android.exoplayer2.util.Util
 
-const val HLS_STATIC_URL = "https://ert-live-bcbs15228.siliconweb.com/media/ert_1/ert_1medium.m3u8"
 const val STATE_RESUME_WINDOW = "resumeWindow"
 const val STATE_RESUME_POSITION = "resumePosition"
 const val STATE_PLAYER_FULLSCREEN = "playerFullscreen"
@@ -30,11 +31,8 @@ class Exo : AppCompatActivity() {
     private var playbackPosition: Long = 0
     private var isFullscreen = false
     private var isPlayerPlaying = true
-    private val mediaItem = MediaItem.Builder()
-            .setUri(HLS_STATIC_URL)
-            .setMimeType(MimeTypes.APPLICATION_M3U8)
-            .build()
 
+    @RequiresApi(Build.VERSION_CODES.KITKAT)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -63,6 +61,11 @@ class Exo : AppCompatActivity() {
     }
 
     private fun initPlayer() {
+        val stringOne = intent.getStringExtra("pos")
+        val mediaItem = MediaItem.Builder()
+                .setUri(stringOne)
+                .setMimeType(MimeTypes.APPLICATION_M3U8)
+                .build()
         exoPlayer = SimpleExoPlayer.Builder(this).build().apply {
             playWhenReady = isPlayerPlaying
             seekTo(currentWindow, playbackPosition)
@@ -119,7 +122,4 @@ class Exo : AppCompatActivity() {
         }
     }
 
-    override fun onBackPressed() {
-        super.onBackPressed()
-    }
 }

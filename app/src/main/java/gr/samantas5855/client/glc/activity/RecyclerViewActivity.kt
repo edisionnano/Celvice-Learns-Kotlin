@@ -54,7 +54,6 @@ class RecyclerViewActivity : AppCompatActivity() {
                             Jsoup.connect("https://greeklivechannels.ml/$link").get().run {
                                 select("div.container").forEachIndexed { _, element ->
                                     m3u8 = element.select("source").attr("src")
-                                    println(m3u8)
                                 }
                         }
                         var logoName = championship.toLowerCase(Locale.ROOT).replace("\\s+".toRegex(), "")
