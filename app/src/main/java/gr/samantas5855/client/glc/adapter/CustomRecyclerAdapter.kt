@@ -1,6 +1,8 @@
 package gr.samantas5855.client.glc.adapter
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.Intent
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -10,8 +12,9 @@ import android.widget.TextView
 import android.widget.Toast
 import gr.samantas5855.client.glc.model.AndroidVersionModel
 import gr.samantas5855.client.glc.R
+import gr.samantas5855.client.glc.player.Exo
 
-class CustomRecyclerAdapter(private val androidVersionList: ArrayList<AndroidVersionModel>) : RecyclerView.Adapter<CustomRecyclerAdapter.ViewHolder>() {
+class CustomRecyclerAdapter(private val androidVersionList: ArrayList<AndroidVersionModel>, var mContext: Context) : RecyclerView.Adapter<CustomRecyclerAdapter.ViewHolder>() {
 
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(p0: ViewHolder, p1: Int) {
@@ -29,7 +32,7 @@ class CustomRecyclerAdapter(private val androidVersionList: ArrayList<AndroidVer
         return androidVersionList.size
     }
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val txtTitle: TextView = itemView.findViewById(R.id.appOSTitle_txtVw)
         val txtContent: TextView = itemView.findViewById(R.id.appOSDetails_txtVw)
         val image: ImageView = itemView.findViewById(R.id.appOS_imageVw)
@@ -38,6 +41,7 @@ class CustomRecyclerAdapter(private val androidVersionList: ArrayList<AndroidVer
             itemView.setOnClickListener {
                 val position: Int = adapterPosition
                 Toast.makeText(itemView.context, "You click on $position", Toast.LENGTH_SHORT).show()
+                mContext.startActivity(Intent(mContext, Exo::class.java))
             }
         }
 

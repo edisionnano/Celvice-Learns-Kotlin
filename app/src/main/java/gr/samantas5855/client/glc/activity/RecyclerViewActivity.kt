@@ -1,7 +1,6 @@
 package gr.samantas5855.client.glc.activity
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.os.AsyncTask
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -10,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView
 import gr.samantas5855.client.glc.R
 import gr.samantas5855.client.glc.adapter.CustomRecyclerAdapter
 import gr.samantas5855.client.glc.model.AndroidVersionModel
-import gr.samantas5855.client.glc.player.Exo
 import gr.samantas5855.client.glc.utils.Helper
 import org.jsoup.Jsoup
 import java.io.IOException
@@ -23,16 +21,14 @@ class RecyclerViewActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_recycler_view)
         val rvRecyclerView = findViewById<RecyclerView>(R.id.sample_recyclerView)
-        rvRecyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
-        val adapter = CustomRecyclerAdapter(Helper.getVersionsList())
+        rvRecyclerView.layoutManager = LinearLayoutManager(this@RecyclerViewActivity, RecyclerView.VERTICAL, false)
+        val adapter = CustomRecyclerAdapter(Helper.getVersionsList(), this@RecyclerViewActivity)
         rvRecyclerView.adapter = adapter
         WebScratch().execute()
         Thread.sleep(3000L)
-        //adapter.notifyDataSetChanged()
-        sendMessage()
+        adapter.notifyDataSetChanged()
         fixedRateTimer("timer", false, 0, 60000){
             this@RecyclerViewActivity.runOnUiThread {
-                //Toast.makeText(this@RecyclerViewActivity, "text", Toast.LENGTH_SHORT).show()
                 WebScratch().execute()
                 Thread.sleep(2000L)
                 adapter.notifyDataSetChanged()
@@ -56,7 +52,7 @@ class RecyclerViewActivity : AppCompatActivity() {
                             //println(link)
                         }
                         var logoName = championship.toLowerCase(Locale.ROOT).replace("\\s+".toRegex(), "")
-                        logoName = logoName.replace("νβα","nba")
+                        logoName = logoName.replace("νβα","nba").replace("τεννις","tennis")
                         val resID = resources.getIdentifier(logoName, "drawable", packageName)
                         Helper.matchList.add(AndroidVersionModel(resID, teams, championship, sound, hour))
                     }
@@ -66,10 +62,5 @@ class RecyclerViewActivity : AppCompatActivity() {
             }
             return null
         }
-    }
-    fun sendMessage() {
-        val intent = Intent(this@RecyclerViewActivity, Exo::class.java).apply {
-        }
-        startActivity(intent)
     }
 }
