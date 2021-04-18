@@ -25,7 +25,7 @@ class RecyclerViewActivity : AppCompatActivity() {
         val adapter = CustomRecyclerAdapter(Helper.getVersionsList(), this@RecyclerViewActivity)
         rvRecyclerView.adapter = adapter
         WebScratch().execute()
-        Thread.sleep(3000L)
+        Thread.sleep(2500L)
         adapter.notifyDataSetChanged()
         fixedRateTimer("timer", false, 0, 60000){
             this@RecyclerViewActivity.runOnUiThread {
@@ -47,14 +47,20 @@ class RecyclerViewActivity : AppCompatActivity() {
                         val sound = element.select("h3")[1].text()
                         val teams = element.select("h3")[2].text()
                         val hour = element.select("h3")[3].text()
-                        for (i in 1..(element.select("a").size) step 1) {
-                            element.select("a")[i - 1].attr("href")
-                            //println(link)
+                        var m3u8 = "empty"
+                        //for (i in 1..(element.select("a").size) step 1) {
+                            val link = element.select("a")[0].attr("href")
+                            println(link)
+                            Jsoup.connect("https://greeklivechannels.ml/$link").get().run {
+                                select("div.container").forEachIndexed { _, element ->
+                                    m3u8 = element.select("source").attr("src")
+                                    println(m3u8)
+                                }
                         }
                         var logoName = championship.toLowerCase(Locale.ROOT).replace("\\s+".toRegex(), "")
                         logoName = logoName.replace("νβα","nba").replace("τεννις","tennis")
                         val resID = resources.getIdentifier(logoName, "drawable", packageName)
-                        Helper.matchList.add(AndroidVersionModel(resID, teams, championship, sound, hour))
+                        Helper.matchList.add(AndroidVersionModel(resID, teams, championship, sound, hour, m3u8))
                     }
                 }
             } catch (e: IOException) {
