@@ -2,15 +2,16 @@
   <library name="Gradle: com.google.android.exoplayer:exoplayer-extractor:2.13.3@aar">
     <ANNOTATIONS>
       <root url="jar://$PROJECT_DIR$/../.gradle/caches/transforms-2/files-2.1/7e3f9709e393970d05e3a40f1a1513e3/exoplayer-extractor-2.13.3/annotations.zip!/" />
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/7e3f9709e393970d05e3a40f1a1513e3/exoplayer-extractor-2.13.3/annotations.zip!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/6264fe01da80e9391491df9a518448db/jetified-exoplayer-extractor-2.13.3/annotations.zip!/" />
     </ANNOTATIONS>
     <CLASSES>
       <root url="jar://$PROJECT_DIR$/../.gradle/caches/transforms-2/files-2.1/7e3f9709e393970d05e3a40f1a1513e3/exoplayer-extractor-2.13.3/jars/classes.jar!/" />
       <root url="file://$PROJECT_DIR$/../.gradle/caches/transforms-2/files-2.1/7e3f9709e393970d05e3a40f1a1513e3/exoplayer-extractor-2.13.3/res" />
       <root url="file://$PROJECT_DIR$/../.gradle/caches/transforms-2/files-2.1/7e3f9709e393970d05e3a40f1a1513e3/exoplayer-extractor-2.13.3/AndroidManifest.xml" />
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/7e3f9709e393970d05e3a40f1a1513e3/exoplayer-extractor-2.13.3/jars/classes.jar!/" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/7e3f9709e393970d05e3a40f1a1513e3/exoplayer-extractor-2.13.3/res" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/7e3f9709e393970d05e3a40f1a1513e3/exoplayer-extractor-2.13.3/AndroidManifest.xml" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/6264fe01da80e9391491df9a518448db/jetified-exoplayer-extractor-2.13.3/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/6264fe01da80e9391491df9a518448db/jetified-exoplayer-extractor-2.13.3/AndroidManifest.xml" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/6264fe01da80e9391491df9a518448db/jetified-exoplayer-extractor-2.13.3/res" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

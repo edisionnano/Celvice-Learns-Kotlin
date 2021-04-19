@@ -26,12 +26,9 @@ class RecyclerViewActivity : AppCompatActivity() {
         rvRecyclerView.layoutManager = LinearLayoutManager(this@RecyclerViewActivity, RecyclerView.VERTICAL, false)
         val adapter = CustomRecyclerAdapter(Helper.getVersionsList(), this@RecyclerViewActivity)
         rvRecyclerView.adapter = adapter
-        WebScratch(adapter).execute()
-        Thread.sleep(2500L)
         fixedRateTimer("timer", false, 0, 60000){
             this@RecyclerViewActivity.runOnUiThread {
                 WebScratch(adapter).execute()
-                Thread.sleep(2000L)
             }
         }
     }
