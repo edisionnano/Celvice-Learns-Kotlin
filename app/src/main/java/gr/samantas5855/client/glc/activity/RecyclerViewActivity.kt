@@ -1,7 +1,6 @@
 package gr.samantas5855.client.glc.activity
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.os.AsyncTask
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -38,7 +37,7 @@ class RecyclerViewActivity : AppCompatActivity() {
     }
 
     @SuppressLint("StaticFieldLeak")
-    inner class WebScratch(var mAdapter: CustomRecyclerAdapter) : AsyncTask<Void, Void, Void>() {
+    inner class WebScratch(private var mAdapter: CustomRecyclerAdapter) : AsyncTask<Void, Void, Void>() {
         override fun doInBackground(vararg params: Void): Void? {
             try {
                 Helper.matchList.clear()
@@ -58,16 +57,13 @@ class RecyclerViewActivity : AppCompatActivity() {
                                     yt = (element.select("iframe").attr("src")).substringAfterLast("/", "")
                                 }
                         }
-                        if (!yt.isEmpty()) {
-                            val doc = Jsoup.connect("https://www.youtube.com/watch?v=8T9SFZDP60Q").userAgent("curl/7.37.0").get()
+                        if (yt.isNotEmpty()) {
+                            val doc = Jsoup.connect(("https://www.youtube.com/watch?v=").plus(yt)).userAgent("curl/7.37.0").get()
                             val regex: Pattern = Pattern.compile("https://manifest.googlevideo.com/api/manifest/hls_variant/(.*)m3u8")
                             val regexMatcher: Matcher = regex.matcher(doc.toString())
                             while (regexMatcher.find()) {
                                 for (i in 1..regexMatcher.groupCount()) {
-                                    // matched text: regexMatcher.group(i)
-                                    // match start: regexMatcher.start(i)
-                                    // match end: regexMatcher.end(i)
-                                    println(regexMatcher.group(i))
+                                    m3u8 = ("https://manifest.googlevideo.com/api/manifest/hls_variant/").plus(regexMatcher.group(i)).plus("m3u8")
                                 }
                             }
                         }
@@ -78,7 +74,7 @@ class RecyclerViewActivity : AppCompatActivity() {
                             Helper.matchList.add(AndroidVersionModel(resID, teams, championship, sound, hour, m3u8))
                         }
                     }
-                    runOnUiThread(java.lang.Runnable{ mAdapter.notifyDataSetChanged() })
+                    runOnUiThread { mAdapter.notifyDataSetChanged() }
                 }
             } catch (e: IOException) {
                 e.printStackTrace()
