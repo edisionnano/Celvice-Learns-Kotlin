@@ -1,6 +1,7 @@
 package gr.samantas5855.client.glc.activity
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.os.AsyncTask
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -26,20 +27,18 @@ class RecyclerViewActivity : AppCompatActivity() {
         rvRecyclerView.layoutManager = LinearLayoutManager(this@RecyclerViewActivity, RecyclerView.VERTICAL, false)
         val adapter = CustomRecyclerAdapter(Helper.getVersionsList(), this@RecyclerViewActivity)
         rvRecyclerView.adapter = adapter
-        WebScratch().execute()
+        WebScratch(adapter).execute()
         Thread.sleep(2500L)
-        adapter.notifyDataSetChanged()
         fixedRateTimer("timer", false, 0, 60000){
             this@RecyclerViewActivity.runOnUiThread {
-                WebScratch().execute()
+                WebScratch(adapter).execute()
                 Thread.sleep(2000L)
-                adapter.notifyDataSetChanged()
             }
         }
     }
 
     @SuppressLint("StaticFieldLeak")
-    inner class WebScratch : AsyncTask<Void, Void, Void>() {
+    inner class WebScratch(var mAdapter: CustomRecyclerAdapter) : AsyncTask<Void, Void, Void>() {
         override fun doInBackground(vararg params: Void): Void? {
             try {
                 Helper.matchList.clear()
@@ -50,13 +49,27 @@ class RecyclerViewActivity : AppCompatActivity() {
                         val teams = element.select("h3")[2].text()
                         val hour = element.select("h3")[3].text()
                         var m3u8 = "empty"
+                        var yt = "empty"
                         //for (i in 1..(element.select("a").size) step 1) {
                             val link = element.select("a")[0].attr("href")
-                            println(link)
                             Jsoup.connect("https://greeklivechannels.ml/$link").get().run {
                                 select("div.container").forEachIndexed { _, element ->
                                     m3u8 = element.select("source").attr("src")
+                                    yt = (element.select("iframe").attr("src")).substringAfterLast("/", "")
                                 }
+                        }
+                        if (!yt.isEmpty()) {
+                            val doc = Jsoup.connect("https://www.youtube.com/watch?v=8T9SFZDP60Q").userAgent("curl/7.37.0").get()
+                            val regex: Pattern = Pattern.compile("https://manifest.googlevideo.com/api/manifest/hls_variant/(.*)m3u8")
+                            val regexMatcher: Matcher = regex.matcher(doc.toString())
+                            while (regexMatcher.find()) {
+                                for (i in 1..regexMatcher.groupCount()) {
+                                    // matched text: regexMatcher.group(i)
+                                    // match start: regexMatcher.start(i)
+                                    // match end: regexMatcher.end(i)
+                                    println(regexMatcher.group(i))
+                                }
+                            }
                         }
                         var logoName = championship.toLowerCase(Locale.ROOT).replace("\\s+".toRegex(), "")
                         logoName = logoName.replace("νβα", "nba").replace("τεννις", "tennis")
@@ -65,6 +78,7 @@ class RecyclerViewActivity : AppCompatActivity() {
                             Helper.matchList.add(AndroidVersionModel(resID, teams, championship, sound, hour, m3u8))
                         }
                     }
+                    runOnUiThread(java.lang.Runnable{ mAdapter.notifyDataSetChanged() })
                 }
             } catch (e: IOException) {
                 e.printStackTrace()
