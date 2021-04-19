@@ -13,6 +13,8 @@ import gr.samantas5855.client.glc.utils.Helper
 import org.jsoup.Jsoup
 import java.io.IOException
 import java.util.*
+import java.util.regex.Matcher
+import java.util.regex.Pattern
 import kotlin.concurrent.fixedRateTimer
 
 class RecyclerViewActivity : AppCompatActivity() {
@@ -57,9 +59,11 @@ class RecyclerViewActivity : AppCompatActivity() {
                                 }
                         }
                         var logoName = championship.toLowerCase(Locale.ROOT).replace("\\s+".toRegex(), "")
-                        logoName = logoName.replace("νβα","nba").replace("τεννις","tennis")
+                        logoName = logoName.replace("νβα", "nba").replace("τεννις", "tennis")
                         val resID = resources.getIdentifier(logoName, "drawable", packageName)
-                        Helper.matchList.add(AndroidVersionModel(resID, teams, championship, sound, hour, m3u8))
+                        if (sound!="Ξένο") {
+                            Helper.matchList.add(AndroidVersionModel(resID, teams, championship, sound, hour, m3u8))
+                        }
                     }
                 }
             } catch (e: IOException) {
