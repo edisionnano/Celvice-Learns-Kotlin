@@ -26,7 +26,7 @@ class RecyclerViewActivity : AppCompatActivity() {
         rvRecyclerView.layoutManager = LinearLayoutManager(this@RecyclerViewActivity, RecyclerView.VERTICAL, false)
         val adapter = CustomRecyclerAdapter(Helper.getVersionsList(), this@RecyclerViewActivity)
         rvRecyclerView.adapter = adapter
-        fixedRateTimer("timer", false, 0, 60000){
+        fixedRateTimer("timer", false, 0, 600000){
             this@RecyclerViewActivity.runOnUiThread {
                 WebScratch(adapter).execute()
             }
@@ -38,7 +38,7 @@ class RecyclerViewActivity : AppCompatActivity() {
         override fun doInBackground(vararg params: Void): Void? {
             try {
                 Helper.matchList.clear()
-                Jsoup.connect("https://greeklivechannels.ml/livematches.html").get().run {
+                Jsoup.connect("https://greeklivechannels.ml/livematches.html").userAgent("Mozilla/5.0 (X11; Linux x86_64; rv:87.0) Gecko/20100101 Firefox/87.0").get().run {
                     select("div.match").forEachIndexed { _, element ->
                         val championship = element.select("h3")[0].text()
                         val sound = element.select("h3")[1].text()
@@ -48,7 +48,7 @@ class RecyclerViewActivity : AppCompatActivity() {
                         var yt = "empty"
                         //for (i in 1..(element.select("a").size) step 1) {
                             val link = element.select("a")[0].attr("href")
-                            Jsoup.connect("https://greeklivechannels.ml/$link").get().run {
+                            Jsoup.connect("https://greeklivechannels.ml/$link").userAgent("Mozilla/5.0 (X11; Linux x86_64; rv:87.0) Gecko/20100101 Firefox/87.0").get().run {
                                 select("div.container").forEachIndexed { _, element ->
                                     m3u8 = element.select("source").attr("src")
                                     yt = (element.select("iframe").attr("src")).substringAfterLast("/", "")
@@ -69,6 +69,7 @@ class RecyclerViewActivity : AppCompatActivity() {
                         val resID = resources.getIdentifier(logoName, "drawable", packageName)
                         if (sound!="Ξένο") {
                             Helper.matchList.add(AndroidVersionModel(resID, teams, championship, sound, hour, m3u8))
+                            //You can move runOnUiThread { mAdapter.notifyDataSetChanged() } here to make them load one by one
                         }
                     }
                     runOnUiThread { mAdapter.notifyDataSetChanged() }
