@@ -109,17 +109,16 @@ class Exo : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         if (Util.SDK_INT <= 23) {
-            playerView.onPause()
-            releasePlayer()
+            initPlayer()
+            playerView.onResume()
         }
     }
 
     override fun onStop() {
         super.onStop()
         if (Util.SDK_INT > 23) {
-            playerView.onPause()
-            releasePlayer()
+            initPlayer()
+            playerView.onResume()
         }
     }
-
 }
