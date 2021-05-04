@@ -67,12 +67,12 @@ class RecyclerViewActivity : AppCompatActivity() {
                                 }
                             }
                         }
-                        if (twitch.isNotEmpty()) {
+                        if (twitch.isNotEmpty() && "http" !in twitch) {
                             val doc = URL(("https://pwn.sh/tools/streamapi.py?url=twitch.tv/").plus(twitch)).readText()
                             m3u8 = doc.substringAfterLast("\": \"").substringBefore("\"}}")
                         }
                         var logoName = championship.toLowerCase(Locale.ROOT).replace("\\s+".toRegex(), "")
-                        logoName = logoName.replace("νβα", "nba").replace("τεννις", "tennis")
+                        logoName = logoName.replace("νβα", "nba").replace("τεννις", "tennis").replace("Κύπελλο Ελλάδας", "kypeloelladas").replace("uefa", "")
                         val resID = resources.getIdentifier(logoName, "drawable", packageName)
                         if (sound!="Ξένο") {
                             Helper.matchList.add(AndroidVersionModel(resID, teams, championship, sound, hour, m3u8))
