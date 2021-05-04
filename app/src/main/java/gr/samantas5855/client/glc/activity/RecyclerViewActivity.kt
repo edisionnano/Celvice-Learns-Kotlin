@@ -48,13 +48,15 @@ class RecyclerViewActivity : AppCompatActivity() {
                         var m3u8 = "empty"
                         var yt = "empty"
                         var twitch = "empty"
+                        var encrypted = "empty"
                         //for (i in 1..(element.select("a").size) step 1) {
                             val link = element.select("a")[0].attr("href")
                             Jsoup.connect("https://greeklivechannels.ml/$link").userAgent("Mozilla/5.0 (X11; Linux x86_64; rv:87.0) Gecko/20100101 Firefox/87.0").get().run {
                                 select("div.container").forEachIndexed { _, element ->
                                     m3u8 = element.select("source").attr("src")
-                                    yt = (element.select("iframe").attr("src")).substringAfterLast("/", "")
+                                    yt = element.select("iframe").attr("src").substringAfterLast("/", "")
                                     twitch = element.select("iframe").attr("src").substringAfter("=").substringBefore('&')
+                                    encrypted = element.select("iframe").attr("src")
                                 }
                         }
                         if (yt.isNotEmpty() && "channel" !in yt) {
@@ -70,6 +72,11 @@ class RecyclerViewActivity : AppCompatActivity() {
                         if (twitch.isNotEmpty() && "http" !in twitch) {
                             val doc = URL(("https://pwn.sh/tools/streamapi.py?url=twitch.tv/").plus(twitch)).readText()
                             m3u8 = doc.substringAfterLast("\": \"").substringBefore("\"}}")
+                        }
+                        if (encrypted.isNotEmpty() && "htm" in encrypted) {
+                            val doc = URL(encrypted).readText()
+                            m3u8 = doc.substringAfterLast("source:'").substringBefore("',")
+                            println("$m3u8")
                         }
                         var logoName = championship.toLowerCase(Locale.ROOT).replace("\\s+".toRegex(), "")
                         logoName = logoName.replace("νβα", "nba").replace("τεννις", "tennis").replace("Κύπελλο Ελλάδας", "kypeloelladas").replace("uefa", "")

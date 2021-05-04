@@ -2,20 +2,24 @@ package gr.samantas5855.client.glc.player
 
 import android.content.pm.ActivityInfo
 import android.graphics.Color
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.LinearLayout
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import gr.samantas5855.client.glc.R
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.SimpleExoPlayer
+import com.google.android.exoplayer2.source.hls.HlsMediaSource
 import com.google.android.exoplayer2.ui.PlayerView
 import com.google.android.exoplayer2.upstream.DataSource
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
+import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory
 import com.google.android.exoplayer2.util.MimeTypes
 import com.google.android.exoplayer2.util.Util
+import gr.samantas5855.client.glc.R
+
 
 const val STATE_RESUME_WINDOW = "resumeWindow"
 const val STATE_RESUME_POSITION = "resumePosition"
@@ -37,7 +41,7 @@ class Exo : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         playerView = findViewById(R.id.player_view)
-        dataSourceFactory = DefaultDataSourceFactory(this, Util.getUserAgent(this, "testapp"))
+        dataSourceFactory = DefaultDataSourceFactory(this, Util.getUserAgent(this, "Mozilla/5.0 (X11; Linux x86_64; rv:88.0) Gecko/20100101 Firefox/88.0"))
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
         window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_IMMERSIVE
                 // Set the content to appear under the system bars so that the
@@ -62,14 +66,19 @@ class Exo : AppCompatActivity() {
 
     private fun initPlayer() {
         val stringOne = intent.getStringExtra("pos")
-        val mediaItem = MediaItem.Builder()
-                .setUri(stringOne)
-                .setMimeType(MimeTypes.APPLICATION_M3U8)
-                .build()
+        //val mediaItem = MediaItem.Builder()
+                //.setUri(stringOne)
+                //.setMimeType(MimeTypes.APPLICATION_M3U8)
+                //.build()
+        val httpDataSourceFactory = DefaultHttpDataSourceFactory(Util.getUserAgent(applicationContext, "ano"), null)
+        httpDataSourceFactory.defaultRequestProperties.set("Referer", "https://greeklivechannels.ml/")
+        val hlsMediaSource = HlsMediaSource.Factory(httpDataSourceFactory)
+                .setAllowChunklessPreparation(true)
+                .createMediaSource(Uri.parse(stringOne))
         exoPlayer = SimpleExoPlayer.Builder(this).build().apply {
             playWhenReady = isPlayerPlaying
             seekTo(currentWindow, playbackPosition)
-            setMediaItem(mediaItem, false)
+            setMediaSource(hlsMediaSource)
             prepare()
         }
         playerView.player = exoPlayer
